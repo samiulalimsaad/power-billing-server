@@ -1,15 +1,15 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { UserModel } from "../Models/User.Model.js";
+import { loginValidationSchema } from "../utils/validationSchema.js";
+
 export const LoginService = async (req, res) => {
     try {
-        const data = LoginValidationSchema.validateSync(req.body, {
+        const data = loginValidationSchema.validateSync(req.body, {
             abortEarly: true,
         });
 
         const user = await UserModel.findOne({ email: data.email });
-        console.log(data.password, user.password);
-
-        console.log(
-            await bcrypt.compareSync(data.password.toString(), user.password)
-        );
 
         if (bcrypt.compareSync(data.password, user.password)) {
             const token = jwt.sign(req.body, process.env.ACCESS_TOKEN, {

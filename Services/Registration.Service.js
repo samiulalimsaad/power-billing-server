@@ -1,6 +1,11 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { UserModel } from "../Models/User.Model.js";
+import { signUpValidationSchema } from "../utils/validationSchema.js";
+
 export const RegistrationService = async (req, res) => {
     try {
-        const data = SignUpValidationSchema.validateSync(req.body, {
+        const data = signUpValidationSchema.validateSync(req.body, {
             abortEarly: true,
         });
 
