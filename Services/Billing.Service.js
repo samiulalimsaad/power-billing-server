@@ -4,8 +4,15 @@ import { billValidationSchema } from "../utils/validationSchema.js";
 export class BillingService {
     async billList(req, res) {
         try {
-            const bills = await BillModel.find({});
-            res.status(200).json(bills);
+            const page = +req.query.page || 1;
+            console.log(page);
+            const bills = await BillModel.find()
+                .limit(10)
+                .skip((page - 1) * 10)
+                .sort({ createdAt: -1 });
+
+            const count = await BillModel.estimatedDocumentCount();
+            res.status(200).json({ bills, count });
         } catch (error) {
             res.status(502).json(error);
         }
