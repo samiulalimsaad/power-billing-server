@@ -2,6 +2,38 @@ import { BillModel } from "../Models/Billing.Model.js";
 import { billValidationSchema } from "../utils/validationSchema.js";
 
 export class BillingService {
+    async search(req, res) {
+        try {
+            const text = req.query.text;
+
+            let ids = [];
+
+            const namesBills = await BillModel.find({
+                fullName: { $regex: ".*" + text + ".*" },
+            });
+            ids = [...ids, ...namesBills.map((v) => v._id.toString())];
+
+            const emailsBills = await BillModel.find({
+                email: { $regex: ".*" + text + ".*" },
+            });
+            ids = [...ids, ...emailsBills.map((b) => b._id.toString())];
+
+            const phonesBills = await BillModel.find({
+                phone: { $regex: ".*" + text + ".*" },
+            });
+            console.log(ids.length);
+            ids = [...ids, ...phonesBills.map((b) => b._id.toString())];
+            console.log(ids.length);
+
+            const bills = await BillModel.find({
+                _id: { $in: [...new Set(ids)] },
+            });
+
+            res.status(200).json(bills);
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
     async billList(req, res) {
         try {
             const page = +req.query.page || 1;
