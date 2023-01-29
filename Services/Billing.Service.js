@@ -14,7 +14,18 @@ export class BillingService {
             const count = await BillModel.estimatedDocumentCount();
             res.status(200).json({ bills, count });
         } catch (error) {
-            res.status(502).json(error);
+            res.status(500).json(error);
+        }
+    }
+
+    async totalBillAmount(req, res) {
+        try {
+            const bill = await BillModel.find();
+            const total = bill.reduce((p, c) => p + c.paidAmount, 0);
+            console.log(total);
+            return res.status(200).json(total);
+        } catch (error) {
+            res.status(500).json({ success: false, errors: error.errors });
         }
     }
 
@@ -42,7 +53,7 @@ export class BillingService {
             );
             res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json({
+            res.status(500).json({
                 success: false,
                 errors: error.message,
             });
@@ -54,7 +65,9 @@ export class BillingService {
             const bill = await BillModel.findByIdAndDelete(req.params.id);
             res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json({ success: false, errors: error.message });
+            res.status(500).json({ success: false, errors: error.message });
+        }
+        {
         }
     }
 }

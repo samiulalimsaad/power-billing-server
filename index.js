@@ -22,6 +22,8 @@ app.post("/api/registration", RegistrationService);
 
 app.post("/api/login", LoginService);
 
+app.get("/api/billing-total", verifyUser, billingService.totalBillAmount);
+
 app.get("/api/billing-list", verifyUser, billingService.billList);
 
 app.post("/api/add-billing", verifyUser, billingService.addBill);
