@@ -1,4 +1,5 @@
 import { BillModel } from "../Models/Billing.Model.js";
+import { billValidationSchema } from "../utils/validationSchema.js";
 
 export class BillingService {
     async billList(req, res) {
@@ -12,14 +13,14 @@ export class BillingService {
 
     async addBill(req, res) {
         try {
-            const data = BillValidationSchema.validateSync(req.body, {
+            const data = billValidationSchema.validateSync(req.body, {
                 abortEarly: false,
             });
             const bill = new BillModel(data);
             await bill.save();
             res.status(200).json(bill);
         } catch (error) {
-            res.status(403).json(error);
+            res.status(403).json({ success: false, errors: error.errors });
         }
     }
 
@@ -34,7 +35,10 @@ export class BillingService {
             );
             res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json(error);
+            res.status(502).json({
+                success: false,
+                errors: error.message,
+            });
         }
     }
 
@@ -43,7 +47,7 @@ export class BillingService {
             const bill = await BillModel.findByIdAndDelete(req.params.id);
             res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json(error);
+            res.status(502).json({ success: false, errors: error.message });
         }
     }
 }

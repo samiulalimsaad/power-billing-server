@@ -3,10 +3,10 @@ const { model, Schema } = mongoose;
 
 const BillingSchema = new Schema(
     {
-        fullName: { type: String, required: true },
-        email: { type: String, required: true },
-        phone: { type: String, required: true },
-        paidAmount: { type: String, required: true },
+        fullName: { type: String, required: [true, "{PATH} is required"] },
+        email: { type: String, required: [true, "{PATH} is required"] },
+        phone: { type: String, required: [true, "{PATH} is required"] },
+        paidAmount: { type: Number, required: [true, "{PATH} is required"] },
     },
     { timestamps: true }
 );

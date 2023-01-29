@@ -25,5 +25,5 @@ export const billValidationSchema = Yup.object({
         .email("Enter a valid email")
         .required("Email is required"),
     phone: Yup.string().required("Phone Number is required"),
-    paidAmount: Yup.string().required("Paid Amount is required"),
+    paidAmount: Yup.number().required("Paid Amount is required"),
 });
