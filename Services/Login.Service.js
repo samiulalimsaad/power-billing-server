@@ -11,7 +11,7 @@ export const LoginService = async (req, res) => {
 
         const user = await UserModel.findOne({ email: data.email });
 
-        if (bcrypt.compareSync(data.password, user.password)) {
+        if (user && bcrypt.compareSync(data.password, user?.password)) {
             const token = jwt.sign(req.body, process.env.ACCESS_TOKEN, {
                 expiresIn: "1d",
             });
