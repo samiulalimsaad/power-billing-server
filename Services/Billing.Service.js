@@ -4,9 +4,9 @@ export class BillingService {
     async billList(req, res) {
         try {
             const bills = await BillModel.find({});
-            res.status(200).json({ success: true, bills });
+            res.status(200).json(bills);
         } catch (error) {
-            res.status(502).json({ success: false, message: error.message });
+            res.status(502).json(error);
         }
     }
 
@@ -17,9 +17,9 @@ export class BillingService {
             });
             const bill = new BillModel(data);
             await bill.save();
-            res.status(200).json({ success: true, bill });
+            res.status(200).json(bill);
         } catch (error) {
-            res.status(403).json({ success: false, message: error.errors });
+            res.status(403).json(error);
         }
     }
 
@@ -32,21 +32,18 @@ export class BillingService {
                     new: true,
                 }
             );
-            res.status(200).json({ success: true, bill });
+            res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json({
-                success: false,
-                message: error.message,
-            });
+            res.status(502).json(error);
         }
     }
 
     async deleteBill(req, res) {
         try {
             const bill = await BillModel.findByIdAndDelete(req.params.id);
-            res.status(200).json({ success: true, bill });
+            res.status(200).json(bill);
         } catch (error) {
-            res.status(502).json({ success: false, message: error.message });
+            res.status(502).json(error);
         }
     }
 }
